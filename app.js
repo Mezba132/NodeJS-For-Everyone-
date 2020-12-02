@@ -28,17 +28,16 @@ const server = http.createServer( function(req, res) {
                  body.push(rawData);
             })
 
-            // EventListner - show RAW Data
+            // EventListner - show parse Data
             req.on('end', function() {
                 const parseBody = Buffer.concat(body).toString();
-                console.log(parseBody);
+                const text = parseBody.split('=')[1];
+                fs.writeFile('message.txt', text, function (err) {
+                    res.statusCode = 302;
+                    console.log(res.statusCode);
+                    return res.end();
+                });
             })
-
-            fs.writeFileSync('message.txt', "asdasdasd");
-            res.statusCode = 302;
-            res.setHeader("location", "/");
-            return res.end();
-        }
 
         res.setHeader('Content-Type', 'text/html');
         res.write('<html>')
@@ -46,6 +45,7 @@ const server = http.createServer( function(req, res) {
         res.write('<body></body><h1>Hello World</h1></body>')
         res.write('</html>')
         res.end();
+    }
 })
 
 server.listen(3000, function () {
