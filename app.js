@@ -1,7 +1,11 @@
 const http = require("http");
+
 const server = http.createServer( function(req, res) {
     res.setHeader('Content-Type', 'text/html');
-    res.write('<h1>Hello World</h1>');
+    res.write('<html>')
+    res.write('<head><title>Learning Nodejs</title></head>')
+    res.write('<body></body><h1>Hello World</h1></body>')
+    res.write('</html>')
     res.end();
 })
 
