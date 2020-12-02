@@ -20,20 +20,32 @@ const server = http.createServer( function(req, res) {
         return res.end();
     }
 
-    if( url === "/message" && method === "POST")
-    {
-        fs.writeFileSync('message.txt', "Dummy Text");
-        res.statusCode = 302;
-        res.setHeader("location", "/");
-        return res.end();
-    }
+    if( url === "/message" && method === "POST") {
+            const body = [];
+            // EventListner - show RAW Data
+            req.on('data', function (rawData) {
+                 console.log(rawData);
+                 body.push(rawData);
+            })
 
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html>')
-    res.write('<head><title>Learning Nodejs</title></head>')
-    res.write('<body></body><h1>Hello World</h1></body>')
-    res.write('</html>')
-    res.end();
+            // EventListner - show RAW Data
+            req.on('end', function() {
+                const parseBody = Buffer.concat(body).toString();
+                console.log(parseBody);
+            })
+
+            fs.writeFileSync('message.txt', "asdasdasd");
+            res.statusCode = 302;
+            res.setHeader("location", "/");
+            return res.end();
+        }
+
+        res.setHeader('Content-Type', 'text/html');
+        res.write('<html>')
+        res.write('<head><title>Learning Nodejs</title></head>')
+        res.write('<body></body><h1>Hello World</h1></body>')
+        res.write('</html>')
+        res.end();
 })
 
 server.listen(3000, function () {
