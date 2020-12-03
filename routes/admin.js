@@ -10,7 +10,7 @@ router.get( '/add-item',(req, res) => {
         '<button>Add Item</button>' +
         '</form></body>')
     res.write('</html>')
-    res.send();
+    res.status(200).send();
 })
 
 router.post( '/item',(req, res, next) => {
