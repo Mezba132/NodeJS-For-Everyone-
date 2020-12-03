@@ -1,53 +1,15 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const app = express();
 
-const server = http.createServer( function(req, res) {
-
-    const url = req.url;
-    const method = req.method;
-
-    if( url === '/')
-    {
-        res.setHeader('Content-Type', 'text/html');
-        res.write('<html>')
-        res.write('<head><title>Learning Nodejs</title></head>')
-        res.write('<body></body>' +
-            '<form action="/message" method="post">' +
-            '<input type="text" name="msg"><br/><button>Post</button>' +
-            '</form>' +
-            '</body>')
-        res.write('</html>')
-        return res.end();
-    }
-
-    if( url === "/message" && method === "POST") {
-            const body = [];
-            // EventListner - show RAW Data
-            req.on('data', function (rawData) {
-                 console.log(rawData);
-                 body.push(rawData);
-            })
-
-            // EventListner - show parse Data
-            req.on('end', function() {
-                const parseBody = Buffer.concat(body).toString();
-                const text = parseBody.split('=')[1];
-                fs.writeFile('message.txt', text, function (err) {
-                    res.statusCode = 302;
-                    console.log(res.statusCode);
-                    return res.end();
-                });
-            })
-
-        res.setHeader('Content-Type', 'text/html');
-        res.write('<html>')
-        res.write('<head><title>Learning Nodejs</title></head>')
-        res.write('<body></body><h1>Hello World</h1></body>')
-        res.write('</html>')
-        res.end();
-    }
+app.use( (req, res) => {
+    res.setHeader('Content-Type', 'text/html');
+    res.write('<html>')
+    res.write('<head><title>Learning Nodejs</title></head>')
+    res.write('<body></body><h1>Hello World</h1></body>')
+    res.write('</html>')
+    res.send();
 })
 
-server.listen(3000, function () {
- console.log("server is running on port 3000");
+app.listen(3000, function () {
+    console.log("server is running on port 3000");
 })
