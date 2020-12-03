@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const rootDir = require("../helper/path");
 
 router.get( '/', (req, res, next) => {
     if(!res.status === 200)
@@ -9,7 +10,7 @@ router.get( '/', (req, res, next) => {
     }
     else
     {
-        res.status(200).sendFile(path.join(__dirname, '../' ,'views', 'shop.html'));
+        res.status(200).sendFile(path.join(rootDir,'views', 'shop.html'));
         // res.status(200).sendFile(process.cwd() + '/views/shop.html');
     }
 

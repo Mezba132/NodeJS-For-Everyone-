@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Item</title>
+    <link rel="stylesheet" href="/css/shop.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li> <a href="/user">Home</a> </li>
-                <li> <a href="#">Add Item</a> </li>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item"> <a href="/user">Home</a> </li>
+                <li class="main-header__item"> <a class="active" href="#">Add Item</a> </li>
             </ul>
         </nav>
     </header>
     <main style="text-align: center">
-        <form action="/admin/item" method="post">
-            <input type="text" name="msg">
+        <form class="product-form" action="/admin/item" method="post">
+            <div class="form-control">
+                <label>Item</label>
+                <input type="text" name="title" id="title">
+            </div>
             <button type="submit">ADD</button>
         </form>
     </main>
