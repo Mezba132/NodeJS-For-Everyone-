@@ -1,16 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 
 router.get( '/add-item',(req, res) => {
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html>')
-    res.write('<head><title>Learning Nodejs</title></head>')
-    res.write('<body><form action="/admin/item" method="post">' +
-        '<input type="text" name="msg">' +
-        '<button>Add Item</button>' +
-        '</form></body>')
-    res.write('</html>')
-    res.status(200).send();
+    console.log(path.join(__dirname, '../', 'views', 'add-item.html'));
+    res.sendFile(path.join(__dirname, '../', 'views', 'add-item.html'));
 })
 
 router.post( '/item',(req, res, next) => {
