@@ -3,14 +3,22 @@ const router = express.Router();
 const rootDir = require("../helper/path");
 const path = require("path");
 
+const products = [];
+
 router.get( '/add-item',(req, res) => {
-    console.log(path.join(rootDir, 'views', 'add-item.html'));
-    res.sendFile(path.join(rootDir, 'views', 'add-item.html'));
+    res.render('add-item', {
+        pageTitle: 'Add Item',
+        path: '/admin/add-item',
+        formsCSS: true,
+        productCSS: true,
+        activeAddProduct: true
+    });
 })
 
 router.post( '/item',(req, res, next) => {
-    console.log(req.body);
-    res.redirect('/user');
+    products.push({ title: req.body.title });
+    res.redirect('/');
 })
 
-module.exports = router;
+exports.routes = router;
+exports.products = products;

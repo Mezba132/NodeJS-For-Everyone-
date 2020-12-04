@@ -80,3 +80,7 @@ button:active {
     background-color: #3e00a1;
     color: white;
 }
+
+label{
+    margin: 25px auto;
+}
