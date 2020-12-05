@@ -17,7 +17,7 @@ exports.postItem = (req, res, next) => {
 }
 
 exports.getAllItem = (req, res, next) => {
-    const items = Items.fetchAll();
+Items.fetchAll( (items) => {
     res.render('shop', {
         prods: items,
         pageTitle: 'Shop',
@@ -25,5 +25,6 @@ exports.getAllItem = (req, res, next) => {
         hasProducts: items.length > 0,
         activeShop: true,
         productCSS: true
-    });
+    })
+ })
 }
