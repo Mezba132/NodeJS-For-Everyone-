@@ -4,17 +4,23 @@ const rootDir = require("../helper/path");
 
 const p = path.join(rootDir, 'Data', "item.json");
 
+const getItemFromFile = callback => {
+    fs.readFile(p, (err, data) => {
+        if(err)
+        {
+            callback([]);
+        }
+        callback(JSON.parse(data));
+    })
+}
+
 module.exports = class Item {
     constructor(title) {
         this.title = title;
     }
 
     save() {
-        fs.readFile(p, (err, data) => {
-            let items = [];
-            if(!err) {
-                items = JSON.parse(data);
-            }
+        getItemFromFile( items => {
             items.push(this);
             fs.writeFile(p, JSON.stringify(items), err => {
                 console.log(err);
@@ -22,14 +28,7 @@ module.exports = class Item {
         })
     }
 
-   static fetchAll(callback) {
-       fs.readFile(p, (err, data) => {
-            if(err)
-            {
-                callback([]);
-            }
-           callback(JSON.parse(data));
-            console.log(callback(JSON.parse(data)));
-        })
+   static fetchAll(cb) {
+       getItemFromFile(cb);
     }
 }
