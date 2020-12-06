@@ -16,13 +16,16 @@ const getItemFromFile = callback => {
 }
 
 module.exports = class Item {
-    constructor(title) {
+    constructor(title, imgUrl, price, description) {
         this.title = title;
+        this.imgUrl = imgUrl;
+        this.price = price;
+        this.description = description;
     }
 
     save() {
         getItemFromFile( items => {
-            items.push(this.title);
+            items.push(this);
             fs.writeFile(p, JSON.stringify(items), err => {
                 console.log(err);
             })
