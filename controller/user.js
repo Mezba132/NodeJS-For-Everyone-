@@ -2,14 +2,28 @@ const Items = require("../model/itemScema");
 
 exports.getAllItem = (req, res, next) => {
     Items.fetchAll( (items) => {
-        res.render('user/item-list', {
+        res.render('user/index', {
             prods: items,
             pageTitle: 'Shop',
             path: '/',
-            hasProducts: items.length > 0,
-            activeShop: true,
-            productCSS: true
         })
+    })
+}
+
+exports.getItemList = (req, res, next) => {
+    Items.fetchAll( (items) => {
+        res.render('user/item-list', {
+            prods: items,
+            pageTitle: 'Items',
+            path: '/items',
+        })
+    })
+}
+
+exports.getCart = (req, res, next) => {
+    res.render('user/cart', {
+        pageTitle: 'Cart',
+        path: '/cart',
     })
 }
 

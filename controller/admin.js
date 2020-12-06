@@ -4,9 +4,6 @@ exports.getAddItem = (req, res) => {
     res.render('admin/add-item', {
         pageTitle: 'Add Item',
         path: '/admin/add-item',
-        formsCSS: true,
-        productCSS: true,
-        activeAddProduct: true
     })
 }
 
@@ -14,4 +11,11 @@ exports.postItem = (req, res, next) => {
     const items = new Items(req.body.title);
     items.save();
     res.redirect('/');
+}
+
+exports.getAdminItem = (req, res, next) => {
+    res.render('admin/item-list', {
+        pageTitle: 'Admin Item',
+        path: '/admin/item-list',
+    })
 }
