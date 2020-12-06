@@ -22,7 +22,10 @@ exports.getItemList = (req, res, next) => {
 
 exports.getItem = (req, res, next) => {
     const itemId = req.params.itemId;
-    console.log(itemId);
+    Items.fetchItemById(itemId, detailsItem => {
+        console.log(detailsItem);
+    })
+    res.redirect('/');
 }
 
 exports.getCart = (req, res, next) => {

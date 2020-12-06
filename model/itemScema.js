@@ -24,6 +24,7 @@ module.exports = class Item {
     }
 
     save() {
+        this.id = Math.random().toString();
         getItemFromFile( items => {
             items.push(this);
             fs.writeFile(p, JSON.stringify(items), err => {
@@ -34,5 +35,12 @@ module.exports = class Item {
 
    static fetchAll(cb) {
        getItemFromFile(cb);
+    }
+
+    static fetchItemById(id, cb) {
+        getItemFromFile( items => {
+            const item = items.find( i => i.id === id);
+            cb(item);
+        })
     }
 }
