@@ -8,6 +8,8 @@ router.get( '/items', userController.getItemList);
 
 router.get( '/cart' , userController.getCart);
 
+router.get( '/items/:itemId', userController.getItem);
+
 
 
 

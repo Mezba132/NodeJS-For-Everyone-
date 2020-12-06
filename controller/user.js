@@ -20,6 +20,11 @@ exports.getItemList = (req, res, next) => {
     })
 }
 
+exports.getItem = (req, res, next) => {
+    const itemId = req.params.itemId;
+    console.log(itemId);
+}
+
 exports.getCart = (req, res, next) => {
     res.render('user/cart', {
         pageTitle: 'Cart',

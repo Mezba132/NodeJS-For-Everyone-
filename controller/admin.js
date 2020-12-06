@@ -18,8 +18,11 @@ exports.postItem = (req, res, next) => {
 }
 
 exports.getAdminItem = (req, res, next) => {
+Items.fetchAll( (items) => {
     res.render('admin/item-list', {
+        prods: items,
         pageTitle: 'Admin Item',
         path: '/admin/item-list',
     })
+  })
 }
