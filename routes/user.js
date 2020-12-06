@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-const adminData = require('./admin');
-const rootDir = require("../helper/path");
-const itemController = require("../controller/items");
+const userController = require("../controller/user");
 
-router.get( '/', itemController.getAllItem);
+router.get( '/', userController.getAllItem);
 
 module.exports = router;

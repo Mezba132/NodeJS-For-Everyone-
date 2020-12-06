@@ -10,6 +10,7 @@ const getItemFromFile = callback => {
         {
             callback([]);
         }
+        // console.log(JSON.parse(data));
         callback(JSON.parse(data));
     })
 }
@@ -21,7 +22,7 @@ module.exports = class Item {
 
     save() {
         getItemFromFile( items => {
-            items.push(this);
+            items.push(this.title);
             fs.writeFile(p, JSON.stringify(items), err => {
                 console.log(err);
             })

@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const rootDir = require("../helper/path");
-const path = require("path");
-const itemController = require("../controller/items");
+const adminController = require("../controller/admin");
 
-router.get( '/add-item', itemController.getAddItem)
+router.get( '/add-item', adminController.getAddItem)
 
-router.post( '/item', itemController.postItem)
+router.post( '/item', adminController.postItem)
 
 module.exports = router;
