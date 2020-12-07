@@ -12,8 +12,6 @@ router.post( '/cart', userController.postCart);
 
 router.get( '/items/:itemId', userController.getItem);
 
-
-
 router.get( '/details', userController.getItem);
 
 

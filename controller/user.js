@@ -1,4 +1,5 @@
 const Items = require("../model/itemScema");
+const cart = require("../model/cartScema");
 
 exports.getAllItem = (req, res, next) => {
     Items.fetchAll( (items) => {
@@ -42,7 +43,10 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
     const itemId = req.body.itemId;
-    console.log(itemId)
+    console.log(itemId);
+    Items.fetchItemById(itemId, item => {
+        cart.addItem(itemId, item.price);
+    })
     res.redirect('/cart');
 }
 
