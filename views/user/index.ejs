@@ -23,9 +23,7 @@
                         <p class="product__description"><%= product.description %></p>
                     </div>
                     <div class="card__actions">
-                        <form action="/admin/edit-item" method="post">
-                            <button class="btn" type="submit">Add to Cart</button>
-                        </form>
+                        <%- include('../includes/cart-button-form.ejs', { product : product})%>
                     </div>
                 </article>
             <% } %>

@@ -17,6 +17,7 @@ const getItemFromFile = callback => {
 
 module.exports = class Item {
     constructor(title, imgUrl, price, description) {
+        this.id = Math.random().toString();
         this.title = title;
         this.imgUrl = imgUrl;
         this.price = price;
@@ -24,7 +25,6 @@ module.exports = class Item {
     }
 
     save() {
-        this.id = Math.random().toString();
         getItemFromFile( items => {
             items.push(this);
             fs.writeFile(p, JSON.stringify(items), err => {

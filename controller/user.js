@@ -23,9 +23,14 @@ exports.getItemList = (req, res, next) => {
 exports.getItem = (req, res, next) => {
     const itemId = req.params.itemId;
     Items.fetchItemById(itemId, detailsItem => {
-        console.log(detailsItem);
+         // console.log(detailsItem);
+        res.render('user/item-detail', {
+            product : detailsItem,
+            pageTitle : 'Product Dexcription',
+            path : "/items"
+        })
     })
-    res.redirect('/');
+    //res.redirect('/user/cart');
 }
 
 exports.getCart = (req, res, next) => {
@@ -33,5 +38,11 @@ exports.getCart = (req, res, next) => {
         pageTitle: 'Cart',
         path: '/cart',
     })
+}
+
+exports.postCart = (req, res, next) => {
+    const itemId = req.body.itemId;
+    console.log(itemId)
+    res.redirect('/cart');
 }
 

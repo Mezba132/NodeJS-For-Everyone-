@@ -8,7 +8,15 @@ router.get( '/items', userController.getItemList);
 
 router.get( '/cart' , userController.getCart);
 
+router.post( '/cart', userController.postCart);
+
 router.get( '/items/:itemId', userController.getItem);
+
+
+
+router.get( '/details', userController.getItem);
+
+
 
 
 
