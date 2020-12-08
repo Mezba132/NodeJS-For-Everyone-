@@ -62,11 +62,12 @@ module.exports = class Item {
     static deleteById(id) {
         getItemFromFile( items => {
             // Only Delete Item
+            const deleteItem = items.find(itemId => itemId.id === id)
             const updateItem = items.filter( itemId => itemId.id !== id )
             fs.writeFile(p, JSON.stringify(updateItem), err => {
                 if(!err)
                 {
-                    Cart.deleteItem(id, items.price);
+                    Cart.deleteItem(id, deleteItem.price);
                 }
             });
         })

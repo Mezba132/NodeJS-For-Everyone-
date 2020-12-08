@@ -44,14 +44,20 @@ module.exports = class cart {
 
     static deleteItem(id, itemPrice){
         fs.readFile(p, (err, fileContent) =>{
-            if(!err)
+            if(err)
             {
-                const updateCard = {...JSON.parse(fileContent)};
-                const deleteItem = updateCard.item.filter( itemId => itemId.id !== id )
-                fs.writeFile(p, JSON.stringify(deleteItem), err => {
-                    console.log(err);
-                });
+                console.log(err);
             }
+            const updateCard = {...JSON.parse(fileContent)};
+            const item = updateCard.item.find( itemId => itemId.id === id);
+            const itemQty = item.quantity;
+            updateCard.item = updateCard.item.filter( itemId => itemId.id !== id );
+            updateCard.totalPrice = updateCard.totalPrice - itemPrice * itemQty;
+            fs.writeFile(p, JSON.stringify(updateCard), err => {
+                console.log(err);
+            });
         })
+
+
     }
 }
