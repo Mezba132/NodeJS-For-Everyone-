@@ -16,8 +16,8 @@ const getItemFromFile = callback => {
 }
 
 module.exports = class Item {
-    constructor(title, imgUrl, price, description) {
-        this.id = Math.random().toString();
+    constructor(id,title, imgUrl, price, description) {
+        this.id = id;
         this.title = title;
         this.imgUrl = imgUrl;
         this.price = price;
@@ -26,10 +26,24 @@ module.exports = class Item {
 
     save() {
         getItemFromFile( items => {
-            items.push(this);
-            fs.writeFile(p, JSON.stringify(items), err => {
-                console.log(err);
-            })
+            if(this.id)
+            {
+                const existingItemIndex = items.findIndex( itemId => itemId.id === this.id);
+                const updateItem = [...items];
+                updateItem[existingItemIndex] = this;
+                // console.log(updateItem)
+                fs.writeFile(p, JSON.stringify(updateItem), err => {
+                    console.log(err);
+                })
+            }
+            else
+            {
+                this.id = Math.random().toString();
+                items.push(this);
+                fs.writeFile(p, JSON.stringify(items), err => {
+                    console.log(err);
+                })
+            }
         })
     }
 
@@ -41,6 +55,17 @@ module.exports = class Item {
         getItemFromFile( items => {
             const item = items.find( i => i.id === id);
             cb(item);
+        })
+    }
+
+    static deleteById(id) {
+        getItemFromFile( items => {
+            // Only Delete Item
+            const updateItem = items.filter( itemId => itemId.id !== id )
+            console.log(updateItem);
+            fs.writeFile(p, JSON.stringify(updateItem), err => {
+                console.log(err);
+            });
         })
     }
 }

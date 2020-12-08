@@ -13,7 +13,7 @@ exports.postItem = (req, res, next) => {
     const imgUrl = req.body.imgUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const items = new Items(title, imgUrl, price, description);
+    const items = new Items(null, title, imgUrl, price, description);
     items.save();
     res.redirect('/');
 }
@@ -25,7 +25,6 @@ exports.getEditItem = (req, res) => {
         res.redirect('/');
     }
     const itemId = req.params.itemId;
-    console.log(itemId);
     Items.fetchItemById(itemId, item => {
         if(!item)
         {
@@ -40,6 +39,16 @@ exports.getEditItem = (req, res) => {
     })
 }
 
+exports.postEditItem = (req, res, next) => {
+    const itemId = req.body.itemId;
+    const updateTitle = req.body.title;
+    const updateImgUrl = req.body.imgUrl;
+    const updatePrice = req.body.price;
+    const updateDescription = req.body.description;
+    const updateItems = new Items(itemId,updateTitle, updateImgUrl, updatePrice, updateDescription);
+    updateItems.save();
+    res.redirect('/admin/item-list');
+}
 
 exports.getAdminItem = (req, res, next) => {
 Items.fetchAll( (items) => {
@@ -49,4 +58,11 @@ Items.fetchAll( (items) => {
         path: '/admin/item-list',
     })
   })
+}
+
+exports.deleteItem = (req, res, next) => {
+    const itemId = req.body.pId;
+    console.log(itemId);
+    Items.deleteById(itemId);
+    res.redirect('/');
 }
