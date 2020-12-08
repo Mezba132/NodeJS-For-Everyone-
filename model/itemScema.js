@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const rootDir = require("../helper/path");
+const Cart = require("./cartScema");
 
 const p = path.join(rootDir, 'Data', "item.json");
 
@@ -62,9 +63,11 @@ module.exports = class Item {
         getItemFromFile( items => {
             // Only Delete Item
             const updateItem = items.filter( itemId => itemId.id !== id )
-            console.log(updateItem);
             fs.writeFile(p, JSON.stringify(updateItem), err => {
-                console.log(err);
+                if(!err)
+                {
+                    Cart.deleteItem(id, items.price);
+                }
             });
         })
     }

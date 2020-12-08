@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const rootDir = require("../helper/path");
 
-const p = path.join(rootDir, 'Data', "cart.json");
 
+const p = path.join(rootDir, 'Data', "cart.json");
 
 module.exports = class cart {
     static addItem(id, itemPrice) {
@@ -39,6 +39,19 @@ module.exports = class cart {
             fs.writeFile(p, JSON.stringify(cart), err => {
                 console.log(err);
             })
+        })
+    }
+
+    static deleteItem(id, itemPrice){
+        fs.readFile(p, (err, fileContent) =>{
+            if(!err)
+            {
+                const updateCard = {...JSON.parse(fileContent)};
+                const deleteItem = updateCard.item.filter( itemId => itemId.id !== id )
+                fs.writeFile(p, JSON.stringify(deleteItem), err => {
+                    console.log(err);
+                });
+            }
         })
     }
 }

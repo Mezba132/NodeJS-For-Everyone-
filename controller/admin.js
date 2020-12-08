@@ -62,7 +62,6 @@ Items.fetchAll( (items) => {
 
 exports.deleteItem = (req, res, next) => {
     const itemId = req.body.pId;
-    console.log(itemId);
     Items.deleteById(itemId);
     res.redirect('/');
 }
