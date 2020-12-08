@@ -4,6 +4,7 @@ exports.getAddItem = (req, res) => {
     res.render('admin/add-item', {
         pageTitle: 'Add Item',
         path: '/admin/add-item',
+        editing : false
     })
 }
 
@@ -16,6 +17,29 @@ exports.postItem = (req, res, next) => {
     items.save();
     res.redirect('/');
 }
+
+exports.getEditItem = (req, res) => {
+    const editMode = req.query.edit;
+    if(!editMode)
+    {
+        res.redirect('/');
+    }
+    const itemId = req.params.itemId;
+    console.log(itemId);
+    Items.fetchItemById(itemId, item => {
+        if(!item)
+        {
+            res.redirect('/');
+        }
+        res.render('admin/edit-item', {
+            pageTitle: 'Edit Item',
+            path: '/admin/edit-item',
+            editing : editMode,
+            item : item
+        })
+    })
+}
+
 
 exports.getAdminItem = (req, res, next) => {
 Items.fetchAll( (items) => {
