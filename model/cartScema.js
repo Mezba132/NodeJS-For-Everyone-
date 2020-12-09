@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const rootDir = require("../helper/path");
 
-
 const p = path.join(rootDir, 'Data', "cart.json");
 
 module.exports = class cart {
@@ -57,7 +56,17 @@ module.exports = class cart {
                 console.log(err);
             });
         })
+    }
 
-
+    static getItemCart(cb) {
+        fs.readFile(p, (err, fileContent) =>{
+            if(err){
+                cb([])
+            }
+            else
+            {
+                cb(JSON.parse(fileContent));
+            }
+        })
     }
 }

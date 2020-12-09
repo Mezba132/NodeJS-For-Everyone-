@@ -23,10 +23,10 @@ exports.getItemList = (req, res, next) => {
 
 exports.getItem = (req, res, next) => {
     const itemId = req.params.itemId;
-    Items.fetchItemById(itemId, detailsItem => {
+    Items.fetchItemById(itemId, data => {
          // console.log(detailsItem);
         res.render('user/item-detail', {
-            product : detailsItem,
+            product : data,
             pageTitle : 'Product Dexcription',
             path : "/items"
         })
@@ -35,9 +35,25 @@ exports.getItem = (req, res, next) => {
 }
 
 exports.getCart = (req, res, next) => {
-    res.render('user/cart', {
-        pageTitle: 'Cart',
-        path: '/cart',
+    cart.getItemCart( cartItem => {
+        Items.fetchAll( items => {
+            const selectedCart = [];
+            for (let item of items)
+            {
+                const findCart = cartItem.item.find( p => p.id === item.id);
+                if(findCart)
+                {
+                    selectedCart.push({ itemData : item, itemQty : findCart.quantity})
+                }
+                console.log(selectedCart);
+            }
+            res.render('user/cart', {
+                prods : selectedCart,
+                pageTitle: 'Cart',
+                path: '/cart',
+            })
+        })
+
     })
 }
 
