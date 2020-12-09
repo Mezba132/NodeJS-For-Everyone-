@@ -1,6 +1,7 @@
 const Items = require("../model/itemScema");
 const cart = require("../model/cartScema");
 
+// Show on Item on index
 exports.getAllItem = (req, res, next) => {
     Items.fetchAll( (items) => {
         res.render('user/index', {
@@ -11,6 +12,7 @@ exports.getAllItem = (req, res, next) => {
     })
 }
 
+// Show All Item
 exports.getItemList = (req, res, next) => {
     Items.fetchAll( (items) => {
         res.render('user/item-list', {
@@ -21,6 +23,7 @@ exports.getItemList = (req, res, next) => {
     })
 }
 
+// Show Item details
 exports.getItem = (req, res, next) => {
     const itemId = req.params.itemId;
     Items.fetchItemById(itemId, data => {
@@ -33,6 +36,7 @@ exports.getItem = (req, res, next) => {
     //res.redirect('/user/cart');
 }
 
+// Show Cart item on cart page
 exports.getCart = (req, res, next) => {
     cart.getItemCart( cartItem => {
         Items.fetchAll( items => {
@@ -54,6 +58,7 @@ exports.getCart = (req, res, next) => {
     })
 }
 
+// Add Cart
 exports.postCart = (req, res, next) => {
     const itemId = req.body.itemId;
     Items.fetchItemById(itemId, item => {
@@ -62,10 +67,11 @@ exports.postCart = (req, res, next) => {
     res.redirect('/cart');
 }
 
+// Delete Cart from cart page
 exports.postCartDelete = (req, res, next) => {
     const itemId = req.body.itemId;
     Items.fetchItemById(itemId, item => {
-        cart.deleteItem(itemId, item.price);
+        cart.deleteCartItem(itemId, item.price);
     })
     res.redirect('/cart');
 }

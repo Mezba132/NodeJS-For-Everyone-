@@ -25,6 +25,7 @@ module.exports = class Item {
         this.description = description;
     }
 
+    // save data on file
     save() {
         getItemFromFile( items => {
             if(this.id)
@@ -48,10 +49,12 @@ module.exports = class Item {
         })
     }
 
+    // Get all Data
    static fetchAll(cb) {
        getItemFromFile(cb);
     }
 
+    // get data by Id
     static fetchItemById(id, cb) {
         getItemFromFile( items => {
             const item = items.find( i => i.id === id);
@@ -59,6 +62,7 @@ module.exports = class Item {
         })
     }
 
+    // Delete Item and Cart Together
     static deleteById(id) {
         getItemFromFile( items => {
             // Only Delete Item
@@ -67,7 +71,7 @@ module.exports = class Item {
             fs.writeFile(p, JSON.stringify(updateItem), err => {
                 if(!err)
                 {
-                    Cart.deleteItem(id, deleteItem.price);
+                    Cart.deleteCartItem(id, deleteItem.price);
                 }
             });
         })

@@ -1,5 +1,6 @@
 const Items = require("../model/itemScema");
 
+// Show Add New Item form
 exports.getAddItem = (req, res) => {
     res.render('admin/add-item', {
         pageTitle: 'Add Item',
@@ -7,7 +8,7 @@ exports.getAddItem = (req, res) => {
         editing : false
     })
 }
-
+// post add item from
 exports.postItem = (req, res, next) => {
     const title = req.body.title;
     const imgUrl = req.body.imgUrl;
@@ -18,6 +19,7 @@ exports.postItem = (req, res, next) => {
     res.redirect('/');
 }
 
+// Show edit button form
 exports.getEditItem = (req, res) => {
     const editMode = req.query.edit;
     if(!editMode)
@@ -39,6 +41,7 @@ exports.getEditItem = (req, res) => {
     })
 }
 
+// post Edit form
 exports.postEditItem = (req, res, next) => {
     const itemId = req.body.itemId;
     const updateTitle = req.body.title;
@@ -50,6 +53,7 @@ exports.postEditItem = (req, res, next) => {
     res.redirect('/admin/item-list');
 }
 
+// Show all item on admin page
 exports.getAdminItem = (req, res, next) => {
 Items.fetchAll( (items) => {
     res.render('admin/item-list', {
@@ -60,6 +64,7 @@ Items.fetchAll( (items) => {
   })
 }
 
+// delete item by admin
 exports.deleteItem = (req, res, next) => {
     const itemId = req.body.pId;
     Items.deleteById(itemId);

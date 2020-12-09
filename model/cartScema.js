@@ -41,8 +41,8 @@ module.exports = class cart {
         })
     }
 
-    static deleteItem(id, itemPrice){
-        fs.readFile(p, (err, fileContent) =>{
+    static deleteCartItem(id, itemPrice){
+        fs.readFile(p, (err, fileContent) => {
             if(err)
             {
                 console.log(err);
