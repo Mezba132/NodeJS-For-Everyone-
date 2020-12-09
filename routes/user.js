@@ -14,6 +14,8 @@ router.get( '/items/:itemId', userController.getItem);
 
 router.get( '/details', userController.getItem);
 
+router.post( '/cart-delete', userController.postCartDelete);
+
 
 
 

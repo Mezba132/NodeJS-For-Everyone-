@@ -24,7 +24,6 @@ exports.getItemList = (req, res, next) => {
 exports.getItem = (req, res, next) => {
     const itemId = req.params.itemId;
     Items.fetchItemById(itemId, data => {
-         // console.log(detailsItem);
         res.render('user/item-detail', {
             product : data,
             pageTitle : 'Product Dexcription',
@@ -45,7 +44,6 @@ exports.getCart = (req, res, next) => {
                 {
                     selectedCart.push({ itemData : item, itemQty : findCart.quantity})
                 }
-                console.log(selectedCart);
             }
             res.render('user/cart', {
                 prods : selectedCart,
@@ -53,15 +51,21 @@ exports.getCart = (req, res, next) => {
                 path: '/cart',
             })
         })
-
     })
 }
 
 exports.postCart = (req, res, next) => {
     const itemId = req.body.itemId;
-    console.log(itemId);
     Items.fetchItemById(itemId, item => {
         cart.addItem(itemId, item.price);
+    })
+    res.redirect('/cart');
+}
+
+exports.postCartDelete = (req, res, next) => {
+    const itemId = req.body.itemId;
+    Items.fetchItemById(itemId, item => {
+        cart.deleteItem(itemId, item.price);
     })
     res.redirect('/cart');
 }
