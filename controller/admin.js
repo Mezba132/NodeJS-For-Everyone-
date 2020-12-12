@@ -1,4 +1,4 @@
-const Items = require("../model/itemScema");
+const Items = require("../model/productScema");
 
 // Show Add New Item form
 exports.getAddItem = (req, res) => {
@@ -8,6 +8,7 @@ exports.getAddItem = (req, res) => {
         editing : false
     })
 }
+
 // post add item from
 exports.postItem = (req, res, next) => {
     const title = req.body.title;
@@ -15,8 +16,9 @@ exports.postItem = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const items = new Items(null, title, imgUrl, price, description);
-    items.save();
-    res.redirect('/');
+    items.save()
+        .then( () => res.redirect("/admin/item-list"))
+        .catch( err => console.log(err));
 }
 
 // Show edit button form
@@ -26,47 +28,49 @@ exports.getEditItem = (req, res) => {
     {
         res.redirect('/');
     }
-    const itemId = req.params.itemId;
-    Items.fetchItemById(itemId, item => {
-        if(!item)
-        {
-            res.redirect('/');
-        }
-        res.render('admin/edit-item', {
+    const pid = req.params.itemId;
+    Items.fetchItemById(pid)
+        .then( ([rows]) => {
+            res.render('admin/edit-item', {
+            item : rows[0],
             pageTitle: 'Edit Item',
             path: '/admin/edit-item',
             editing : editMode,
-            item : item
+            })
         })
-    })
+        .catch(err => console.log(err));
 }
 
 // post Edit form
 exports.postEditItem = (req, res, next) => {
-    const itemId = req.body.itemId;
+    const pId = req.body.itemId;
     const updateTitle = req.body.title;
     const updateImgUrl = req.body.imgUrl;
     const updatePrice = req.body.price;
     const updateDescription = req.body.description;
-    const updateItems = new Items(itemId,updateTitle, updateImgUrl, updatePrice, updateDescription);
-    updateItems.save();
-    res.redirect('/admin/item-list');
+    const updateItems = new Items(pId,updateTitle, updateImgUrl ,updatePrice, updateDescription);
+    updateItems.update()
+        .then( () => res.redirect("/admin/item-list"))
+        .catch( err => console.log(err));
 }
 
 // Show all item on admin page
 exports.getAdminItem = (req, res, next) => {
-Items.fetchAll( (items) => {
-    res.render('admin/item-list', {
-        prods: items,
-        pageTitle: 'Admin Item',
-        path: '/admin/item-list',
+Items.fetchAll()
+    .then(([rows]) => {
+        res.render('admin/item-list', {
+            prods: rows,
+            pageTitle: 'Admin Item',
+            path: '/admin/item-list',
+        })
     })
-  })
+    .catch(err => console.log(err))
 }
 
 // delete item by admin
 exports.deleteItem = (req, res, next) => {
-    const itemId = req.body.pId;
-    Items.deleteById(itemId);
-    res.redirect('/');
+    const pId = req.body.pId;
+    Items.deleteById(pId)
+        .then( () => res.redirect("/admin/item-list"))
+        .catch( err => console.log(err) );
 }

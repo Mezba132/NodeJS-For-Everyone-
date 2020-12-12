@@ -6,13 +6,14 @@ const path = require("path");
 const rootDir = require("./helper/path");
 const app = express();
 const errPage = require("./controller/404");
+const db = require("./helper/db");
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // 3rd Party Middleware
 app.use(bodyParsed.urlencoded({extended : true}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(rootDir, 'public')));
 
 // Our Middleware
 app.use(userRoutes);

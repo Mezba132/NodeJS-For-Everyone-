@@ -1,47 +1,31 @@
-const fs = require("fs");
-const path = require("path");
-const rootDir = require("../helper/path");
 
-const p = path.join(rootDir, 'Data', "cart.json");
+const db = require("../helper/db");
 
 module.exports = class cart {
-    static addItem(id, itemPrice) {
-        // fetch the previous cart
-        fs.readFile(p, (err, data) =>{
-            let cart = {item : [], totalPrice : 0};
-            if(!err)
-            {
-                cart = JSON.parse(data);
-            }
 
-            // Analyze the cart => find the existing cart
-            const existingCartIndex = cart.item.findIndex( ci => ci.id === id);
-            console.log(existingCartIndex);
-            const existingCart = cart.item[existingCartIndex];
-            console.log(existingCartIndex);
-            let updateCart;
+    static addItem(id, price) {
+        const cartId = id;
+        const cartPrice = price;
 
-            // Add New cart
-            if(existingCart)
+        db.execute("select * from cart where id = ?",  [cartId])
+            .then(([rows, filedata]) => {
+                const pId = rows[0].id;
+            if(cartId === pId)
             {
-                updateCart = {...existingCart};
-                updateCart.quantity = updateCart.quantity + 1;
-                cart.item = [...cart.item];
-                cart.item[existingCartIndex] = updateCart;
+                let pQty = rows[0].qty;
+                let totalCost = rows[0].tcost;
+                 pQty += 1;
+                 totalCost += cartPrice;
+                console.log(pQty);
+                console.log(totalCost);
+                return db.execute("update cart set qty = ?, tcost = ? where id = ?",  [pQty , totalCost, pId]);
             }
-            else
-            {
-                updateCart = { id : id, quantity : 1 };
-                cart.item = [...cart.item, updateCart];
-            }
-            cart.totalPrice = cart.totalPrice + + itemPrice;
-            fs.writeFile(p, JSON.stringify(cart), err => {
-                console.log(err);
-            })
+                const quantity = 1;
+                return db.execute("insert into cart (qty,tcost) values(?,?)", [quantity,cartPrice]);
         })
     }
 
-    static deleteCartItem(id, itemPrice){
+    static deleteCartItem(id, itemPrice) {
         fs.readFile(p, (err, fileContent) => {
             if(err)
             {
@@ -58,15 +42,7 @@ module.exports = class cart {
         })
     }
 
-    static getItemCart(cb) {
-        fs.readFile(p, (err, fileContent) =>{
-            if(err){
-                cb([])
-            }
-            else
-            {
-                cb(JSON.parse(fileContent));
-            }
-        })
+    static getCart() {
+        return db.execute("select * from cart");
     }
 }
