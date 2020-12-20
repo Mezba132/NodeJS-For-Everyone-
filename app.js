@@ -6,7 +6,7 @@ const path = require("path");
 const rootDir = require("./helper/path");
 const app = express();
 const errPage = require("./controller/404");
-const db = require("./helper/db");
+const sequelize = require("./helper/db");
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -21,6 +21,13 @@ app.use('/admin', adminRoutes);
 
 app.use(errPage);
 
-app.listen(3000, () => {
-    console.log("server is running on port 3000");
-})
+sequelize
+    .sync()
+    .then( results => {
+        app.listen(3000, () => {
+            console.log("server is running on port 3000");
+        })
+    })
+    .catch( err => {
+        console.log(err);
+    })
