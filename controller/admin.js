@@ -1,4 +1,4 @@
-const Items = require("../model/productScema");
+const Product = require("../model/productScema");
 
 // Show Add New Item form
 exports.getAddItem = (req, res) => {
@@ -9,16 +9,24 @@ exports.getAddItem = (req, res) => {
     })
 }
 
-// post add item from
+// post add item form
 exports.postItem = (req, res, next) => {
     const title = req.body.title;
     const imgUrl = req.body.imgUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const items = new Items(null, title, imgUrl, price, description);
-    items.save()
-        .then( () => res.redirect("/admin/item-list"))
-        .catch( err => console.log(err));
+    Product.create({
+        title : title,
+        price : price,
+        imageURL : imgUrl,
+        description : description
+    })
+        .then( results => {
+            console.log(results);
+        })
+        .catch( err => {
+            console.log(err)
+        })
 }
 
 // Show edit button form
@@ -29,7 +37,7 @@ exports.getEditItem = (req, res) => {
         res.redirect('/');
     }
     const pid = req.params.itemId;
-    Items.fetchItemById(pid)
+    Product.fetchItemById(pid)
         .then( ([rows]) => {
             res.render('admin/edit-item', {
             item : rows[0],
@@ -56,7 +64,7 @@ exports.postEditItem = (req, res, next) => {
 
 // Show all item on admin page
 exports.getAdminItem = (req, res, next) => {
-Items.fetchAll()
+Product.fetchAll()
     .then(([rows]) => {
         res.render('admin/item-list', {
             prods: rows,
@@ -70,7 +78,7 @@ Items.fetchAll()
 // delete item by admin
 exports.deleteItem = (req, res, next) => {
     const pId = req.body.pId;
-    Items.deleteById(pId)
+    Product.deleteById(pId)
         .then( () => res.redirect("/admin/item-list"))
         .catch( err => console.log(err) );
 }
