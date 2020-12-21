@@ -56,10 +56,19 @@ exports.postEditProduct = (req, res, next) => {
     const updateImgUrl = req.body.imgUrl;
     const updatePrice = req.body.price;
     const updateDescription = req.body.description;
-    const updateItems = new Items(pId,updateTitle, updateImgUrl ,updatePrice, updateDescription);
-    updateItems.update()
-        .then( () => res.redirect("/admin/item-list"))
-        .catch( err => console.log(err));
+    Product.findByPk(pId)
+        .then( products => {
+            products.title = updateTitle;
+            products.price = updatePrice;
+            products.imageURL = updateImgUrl;
+            products.description = updateDescription;
+            return products.save();
+        })
+        .then( (results) =>  {
+            console.log("Data Updated")
+            res.redirect('/admin/product-list')
+        })
+        .catch( err => console.log(err))
 }
 
 // Show all item on admin page
