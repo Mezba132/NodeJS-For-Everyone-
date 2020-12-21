@@ -1,16 +1,16 @@
 const Product = require("../model/productScema");
 
 // Show Add New Item form
-exports.getAddItem = (req, res) => {
-    res.render('admin/add-item', {
-        pageTitle: 'Add Item',
-        path: '/admin/add-item',
+exports.getAddProduct = (req, res) => {
+    res.render('admin/add-product', {
+        pageTitle: 'Add product',
+        path: '/admin/add-product',
         editing : false
     })
 }
 
 // post add item form
-exports.postItem = (req, res, next) => {
+exports.postProduct = (req, res, next) => {
     const title = req.body.title;
     const imgUrl = req.body.imgUrl;
     const price = req.body.price;
@@ -30,19 +30,19 @@ exports.postItem = (req, res, next) => {
 }
 
 // Show edit button form
-exports.getEditItem = (req, res) => {
+exports.getEditProduct = (req, res) => {
     const editMode = req.query.edit;
     if(!editMode)
     {
         res.redirect('/');
     }
-    const pid = req.params.itemId;
-    Product.fetchItemById(pid)
-        .then( ([rows]) => {
-            res.render('admin/edit-item', {
-            item : rows[0],
+    const pid = req.params.productId;
+    Product.findAll({ where : { id : pid} })
+        .then( products => {
+            res.render('admin/edit-product', {
+            product : products[0],
             pageTitle: 'Edit Item',
-            path: '/admin/edit-item',
+            path: '/admin/edit-product',
             editing : editMode,
             })
         })
@@ -50,8 +50,8 @@ exports.getEditItem = (req, res) => {
 }
 
 // post Edit form
-exports.postEditItem = (req, res, next) => {
-    const pId = req.body.itemId;
+exports.postEditProduct = (req, res, next) => {
+    const pId = req.body.productId;
     const updateTitle = req.body.title;
     const updateImgUrl = req.body.imgUrl;
     const updatePrice = req.body.price;
@@ -63,20 +63,20 @@ exports.postEditItem = (req, res, next) => {
 }
 
 // Show all item on admin page
-exports.getAdminItem = (req, res, next) => {
-Product.fetchAll()
-    .then(([rows]) => {
-        res.render('admin/item-list', {
-            prods: rows,
-            pageTitle: 'Admin Item',
-            path: '/admin/item-list',
+exports.getProductList = (req, res, next) => {
+Product.findAll()
+    .then( products => {
+        res.render('admin/product-list', {
+            prods: products,
+            pageTitle: 'Admin-Product List',
+            path: '/admin/product-list',
         })
     })
     .catch(err => console.log(err))
 }
 
 // delete item by admin
-exports.deleteItem = (req, res, next) => {
+exports.deleteProduct = (req, res, next) => {
     const pId = req.body.pId;
     Product.deleteById(pId)
         .then( () => res.redirect("/admin/item-list"))

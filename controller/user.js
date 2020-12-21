@@ -29,18 +29,16 @@ exports.getItemList = (req, res, next) => {
 
 // Show Item details
 exports.getItem = (req, res, next) => {
-    const pId = req.params.itemId;
-    Product.fetchItemById(pId)
-        .then(([rows, fileData]) => {
-            res.render('user/item-detail', {
-                product : rows[0],
-                pageTitle : 'Product Dexcription',
-                path : "/items"
+    const pId = req.params.productId;
+    Product.findByPk(pId)
+        .then( products => {
+            res.render('user/product-details', {
+                product : products,
+                pageTitle : 'Product Description',
+                path : "/products"
             })
         })
-        .catch( err => {
-            console.log(err);
-        });
+        .catch( err => console.log(err));
 }
 
 // Show Cart item on cart page
