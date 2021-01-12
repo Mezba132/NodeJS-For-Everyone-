@@ -1,5 +1,5 @@
-const Product = require("../model/productScema");
-const cart = require("../model/cartScema");
+const Product = require("../model/product");
+const cart = require("../model/cart");
 
 // Show on Item on index
 exports.getAllItem = (req, res, next) => {
@@ -43,30 +43,49 @@ exports.getItem = (req, res, next) => {
 
 // Show Cart item on cart page
 exports.getCart = (req, res, next) => {
-    cart.getCart()
-        .then(([rows, fileData]) => {
-            res.render('user/cart', {
-                prods : rows,
-                pageTitle: 'Cart',
-                path: '/cart',
-            })
+    req.user.getCart()
+        .then(cart => {
+            return cart
+                .getProducts()
+                .then(products => {
+                    res.render('user/cart',{
+                        path : '/cart',
+                        pageTitle:'your cart',
+                        products:products
+                    })
+                })
+                .catch(err => console.log(err))
         })
-        .catch( err => console.log(err));
+        .catch(err => console.log(err))
 }
 
 // Add Cart
 exports.postCart = (req, res, next) => {
-    const itemId = req.body.itemId;
-    Product.fetchItemById(itemId)
-        .then( ([rows, filedata]) => {
-            const pid = rows[0].id;
-            const cost = rows[0].price;
-            cart.addItem(pid,cost);
-            res.redirect('/cart');
+    const proId = req.body.productId;
+    console.log(proId);
+    let fetchCart;
+    req.user.getCart()
+        .then(cart => {
+            fetchCart = cart;
+            return cart.getProducts({ where: {id : proId}})
         })
-        .catch( err => {
-            console.log(err);
+        .then(products => {
+            let product;
+            if(products.length > 0)
+            {
+                product = products[0]
+            }
+            let newQuantity = 1;
+            if(product) {
+                //...
+            }
+            return Product.findByPk(proId)
+                .then(product => {
+                    return fetchCart.addProduct(product, { through : {quantity: newQuantity}});
+                })
+                .catch(err => console.log(err))
         })
+        .catch(err => console.log(err));
 }
 
 // Delete Cart from cart page

@@ -1,4 +1,4 @@
-const Product = require("../model/productScema");
+const Product = require("../model/product");
 
 // Show Add New Item form
 exports.getAddProduct = (req, res) => {
@@ -15,7 +15,7 @@ exports.postProduct = (req, res, next) => {
     const imgUrl = req.body.imgUrl;
     const price = req.body.price;
     const description = req.body.description;
-    Product.create({
+    req.user.createProduct({
         title : title,
         price : price,
         imageURL : imgUrl,
@@ -23,6 +23,7 @@ exports.postProduct = (req, res, next) => {
     })
         .then( results => {
             console.log(results);
+            res.redirect('/admin/product-list');
         })
         .catch( err => {
             console.log(err)
@@ -87,7 +88,13 @@ Product.findAll()
 // delete item by admin
 exports.deleteProduct = (req, res, next) => {
     const pId = req.body.pId;
-    Product.deleteById(pId)
-        .then( () => res.redirect("/admin/item-list"))
+    Product.findByPk(pId)
+        .then( products => {
+            return products.destroy()
+        })
+        .then( () => {
+            console.log("Delete Successfully");
+            res.redirect("/admin/product-list")
+        })
         .catch( err => console.log(err) );
 }
